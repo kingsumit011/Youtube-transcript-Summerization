@@ -17,8 +17,10 @@ PyYAML==6.0
 regex==2021.11.2
 requests==2.26.0
 sacremoses==0.0.46
+sentencepiece==0.1.96
 six==1.16.0
 tokenizers==0.10.3
+torch==1.10.0
 tqdm==4.62.3
 transformers==4.12.2
 typing-extensions==3.10.0.2
