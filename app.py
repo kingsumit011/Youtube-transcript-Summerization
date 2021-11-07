@@ -1,27 +1,51 @@
+from html.entities import html5
 from flask import Flask
-from datetime import datetime
+from flask import request
+from requests.sessions import Request
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 
 from youtube_transcript_api import YouTubeTranscriptApi
+
 
 # define a variable to hold you app
 app = Flask(__name__)
 
 # define your resource endpoints
-app.route('/')
+@app.route('/')
 def index_page():
-    return "Hello world"
+    html =  '''\
+    <!DOCTYPE html>
+    <html>
+        <head>
+        </head>
+    <body>
+        '''+"Hello World" + '''
+    </body>
+    </html>'''
+    return html
 
-app.route('/time', methods=['GET'])
-def get_time():
-    return str(datetime.datetime.now())
+@app.route('/api/summarize', methods=['GET'])
+def main():
+    vedio_id = request.args.get('youtube_vid')
+    transcript = youtube_vedio_transcript_english(vedio_id)
+    
+    html =  '''\
+    <!DOCTYPE html>
+    <html>
+        <head>
+        </head>
+    <body>
+        '''+transcript + '''
+    </body>
+    </html>'''
+    return html;
 
 def youtube_vedio_transcript_english(vedio_id:str):
-    transcript_en = YouTubeTranscriptApi.get_transcript(vedio_id , languages=['en'])
+    transcript_en = YouTubeTranscriptApi.get_transcript(vedio_id , languages=['en-US'])
     transcript = ""
     for item in transcript_en:
         transcript += item["text"]
-    return transcript
+    return transcript_summarization(transcript)
 
 def transcript_summarization(transcript:str):
 
